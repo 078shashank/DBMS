@@ -1,0 +1,171 @@
+Cricket Database:
+
+TableCreation
+CREATE TABLE TEAM
+       (TID     NUMBER     PRIMARY KEY, 
+      TNAME       VARCHAR(200),
+           COACH         VARCHAR(200),
+             CAPTAIN_PID    NUMBER  ,
+            CITY                VARCHAR (50))
+
+CREATETABLE PLAYER
+(  PID       NUMBER   PRIMARY KEY,  
+               PNAME        VARCHAR(20),
+              AGE      INTEGER   ,  
+       TID   INTEGER REFERENCES   TEAM  (TID));
+
+CREATETABLE STADIUM
+(SID INTEGER  PRIMARY KEY,
+             SNAME     VARCHAR(20),
+            PICODE    NUMBER(8),
+            CITY           VARCHAR(20),
+AREA          VARCHAR(20));
+
+  CREATE TABLE MATCH( 
+                  MID INTEGER PRIMARY KEY,  
+                  MDATE DATE,
+                  TIME VARCHAR(6),
+                  SID INT REFERENCES STADIUM(SID) ,
+      TEAM1_ID INT REFERENCES TEAM(TID),
+                 TEAM2_ID INT REFERENCES TEAM(TID),
+                 WINNING_TEAM_ID INT REFERENCES TEAM(TID),
+                 MAN_OF_MATCH INT REFERENCES PLAYER(PID), 
+                 PID INT REFERENCES PLAYER(PID));
+
+
+
+
+CREATE TABLE PLAYER_PHONE( 
+PID INT REFERENCES  PLAYER(PID)
+,PHONE INTEGER 
+,PRIMARY KEY(PID,PHONE));
+INSERT ING VALUES TO TABLE  TEAM
+INSERT INTO TEAMVALUES (126,'rcb','sunil',1,'bangalore');
+INSERT INTO TEAMVALUES (123,'rcb','sunil',1,'bangalore');
+INSERT INTO TEAMVALUES (124,'csk','laxman',6,'chennai');
+INSERT INTO TEAMVALUES (125,'royal','singh',4,'rajasthan');
+INSERT INTO TEAMVALUES (127,'dare','sehwag',5,'delhi');
+
+SELECT * FROM  TEAM;
+
+
+
+T_ID	TNAME	COACH	CAPTAIN_PID    NUMBER  	CITY         
+126	Rcb	Sunil	1	Bangalore
+123	Rcb	Sunil	1	Bagalore
+124	Csk	Laxman	6	Chennai
+125	Royal	Singh	4	Rajasthan
+127	Dare	Sehwag	5	Delhi
+
+INSERT ING VALUES TO TABLE  PLAYER
+INSERT INTO PLAYER VALUES (1,'sachin',33,123);
+INSERT INTO PLAYER VALUES (2,'dravid',32,123);
+INSERT INTO PLAYER VALUES (3,'dhoni',30,123);
+INSERT INTO PLAYER VALUES (4,'raina',30,123);
+INSERT INTO PLAYER VALUES (5,'kohli',23,123);
+
+
+
+
+
+
+SELECT * FROM PLAYER;
+
+
+
+
+PID	PNAME  	AGE      	       T_ID   
+1	Sachin	33	126
+2	Dravid	32	123
+3	Dhoni	30	124
+4	Raina	30	125
+5	Kohli	23	127
+
+INSERT ING VALUES TO TABLES STADIUM
+INSERT INTO STADIUM  VALUES(111,'chinnaswamy',57001,'bangalore','mg);
+INSERT INTO STADIUM  VALUES (222,'kotla',58001,'delhi','aaa');
+INSERT INTO STADIUM  VALUES (333,'international',59001,'chennai','ddd');
+INSERT INTO STADIUM  VALUES (444,'ksca',51001,'bangalore','ttt');
+INSERT INTO STADIUM  VALUES (555,'csca',55001,'cochin','nnn');
+
+SELECT*FROM STADIUM;
+
+
+
+SID	SNAME	PICODE	CITY	AREA
+111	Chinnaswamy	57001	Bangalore	mg
+222	Kotla	58001	Delhi	aaa
+333	International	59001	Chennai	ddd
+444	Ksca	51001	Bangalore	ttt
+555	Csca	55001	Cochin	nnn
+INSERT ING VALUES TO TABLE  MATCH
+INSERT INTO MATCH VALUES (101,'10-jan-2017','10am',111,123,124,123,1,1);
+  INSERT INTO MATCH   VALUES (102,'9-jan-2017','9am',222,124,127,127,5,3);
+  INSERT INTO MATCH VALUES (103,'15-jan-2017','12pm',333,125,127,127,5,3);
+   INSERT INTO MATCH VALUES (104,'19-jan-2017','8pm',444,125,123,123,1,1);
+   INSERT INTO MATCH VALUES (105,'21-jan-2021,'5pm',555,121,123,126,9,5);
+
+
+
+ SELECT*FROM MATCH;
+
+
+MID	MDATE	TIME	SID	TEAM1_ID	TEAM2_2	WT_ID	MOM	PID
+101	10-jan-2017	10 am	111	123	124	123	1	1
+102	9-jan-2011	9 am	222	124	127	127	5	2
+103	15-jan-2017	12 pm	333	125	127	127	5	3
+104	19-jan-2017	8 pm	444	126	125	126	1	4
+105	23-jan-2021	5pm	555	121	123	121	9	5
+
+INSERT ING VALUES TO TABLE  PLAYER _PHONE
+
+INSERT (1,10201710); INTO PLAYER _PHONE VALUES
+INSERT INTO VALUES insert into player_phone values(2,10201709);
+INSERT INTO VALUES insert into player_phone values(2,102017105);
+INSERT INTO VALUES insert into player_phone values(3,10201710
+
+SELECT * FROM PLAYER_PHONE;
+
+
+
+
+salesman_id	salesman_name	city	commission
+5001	Priya	Bangalore	15
+5002	Preethi	Mysore	13
+5003	Poonam	Mangalore	11
+5004	Payal	Delhi	12
+5005	Prerana	Bombay	19
+
+ 
+
+Write SQL queries to:
+1.	Display the youngest player (in terms of age)Name, Team name, age in which he belongs of the tournament.
+Select pname, tname, age from player p,team t where p.tid=t.tid and age =(select min(age) from player);
+Pname 	tname  	age
+kohli	             rcb	            23
+2.	List the details of the stadium where the maximum number of matches were played.
+Select m.sid,count(m.mid),s.sname from match m,stadium s where
+m.sid=s.sid group by m.sid order by m.mid limit 1;
+sid	      count(m.mid)	  sname
+111	         3      	              chinnaswamy
+3.	List the details of the player who is not a captain but got the man_of_match award at least in two matches.
+Select * from player where pid not in(select captain_pid from team)
+and pid in(select m.pid from match m group by m.man_of_match
+having count(m.man_of_match)>1);
+pid	pname	        age   	tid
+3	dhoni	        30	123
+4.	Display the team details who won the maximum matches.
+Select m.winning_team_id,count(m.winning_team_id) from match m group by m.winning_team_id  order by count(m.winning_team_id) desc limit 1;
+winning_team_id	count(m.winning_team_id)
+127                                       	2
+5.	Display the team name where all its won matches played in the same stadium.
+Select m.winning_team_id,t.tname,m.sid,s.sname from match m,team t,stadium s
+where m.winning_team_id=t.tid and m.sid=s.sid group by m.winning_team_id having count( distinct m.sid)=1;
+		
+winning_team_id	tname  	sid	sname
+123	rcb	111	chinnaswamy
+
+
+
+
+

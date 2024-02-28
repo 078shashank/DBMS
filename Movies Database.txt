@@ -1,0 +1,160 @@
+Movies Database:
+
+TableCreation
+
+
+CREATE  TABLE  actor(
+act_id NUMBER(10) PRIMARY KEY,
+act_name VARCHAR(20) ,
+act_gender VARCHAR(20));
+
+
+CREATE TABLE  director(
+
+dir_id	NUMBER(10)	PRIMARY KEY,
+dir_name	VARCHAR(20)	
+dir_phone	NUMBER(10));	
+
+CREATE  TABLE  Movie(
+mov_id	NUMBER(10)	PRIMARY KEY  
+mov_title	VARCHAR(20)	
+mov_year	NUMBER(10)	
+mov_lang	VARCHAR(20)	
+dir_id	NUMBER(10) REFERENCES director(dir_id));
+ 
+CREATE TABLE  movie_cast (
+act_id	NUMBER(10)	NOT NULL REFERENCESactor(act_id),mov_id  NUMBER(10)	NOT NULL REFERENCES movie(mov_id),role	VARCHAR(20)		NOTNULL,
+PRIMARY KEY (act_id1,mov_id1));
+CREATE TABLE rating(
+
+mov_id	NUMBER(10)	NOT NULL REFERENCES movie(mov_id),
+rev_stars	NUMBER(10)	NOT NULL,
+PRIMARY KEY (mov_id11,rev_stars));
+
+INSERT ING VALUES TO TABLE ACTOR 
+INSERT INTO  ACTORVALUES(1, ' yash', ‘M');
+ INSERT INTO ACTORVALUES(2, ' sudeep', ' M');
+INSERT INTO  ACTORVALUES(3, ' kajol ', ' F');
+INSERT INTO  ACTOR VALUES(4, ' madhuri ', ' F');
+INSERT INTO ACTORVALUES(5,'sonam','F');
+SELECT * FROM  ACTOR ;
+
+
+act_id	act_name	act_gender
+1	yash	M
+2	sudeep	M
+3	kajol	F
+4	madhuri	F
+5	sonam	F
+	
+
+
+
+INSERT ING VALUES TO TABLE DIRECTOR 
+
+INSERT INTO DIRECTOR VALUES(591,'Hitchcock ',98515561);
+INSERT INTO DIRECTOR VALUES(592, ' Steven Spielberg', 97234535);
+INSERT INTO DIRECTOR VALUES(593,'David',98451246);
+INSERT INTO DIRECTOR VALUES(594, ' Michael', 99458933);
+INSERT INTO DIRECTOR VALUES(595,'Milos',99999999);
+SELECT * FROM director;
+
+Dir_id	Dir_name	Dir_phone
+591	Hitchcock	98515561
+592	StevenSpielberg	97234535
+593	David	98451246
+594	Michael	99458933
+595	Milos	99999999
+
+INSERT ING VALUES TO TABLE MOVIE 
+
+INSERT INTO MOVIE VALUES(901, ' mann', 2017,' hindi', 591);
+INSERT INTO MOVIE VALUES(902, ' deewana', 2010, ' hindi', 592);
+INSERTINTOMOVIE VALUES(903,'nuvve',1999,'telugu',593);
+INSERT INTO MOVIE VALUES(904, 'santosham ', 1997, ' telugu', 594);
+INSERT INTO MOVIE VALUES(905, ' Amadeus', 2005, ' English', 595);
+SELECT *FROM MOVIE;
+Mov_id	Mov_title	Mov_year	Mov_lang	Dir_id1
+901	mann	2017	hindi	591
+902	deewana	2010	hindi	592
+903	nuvve	1999	telugu	593
+904	santosham	1997	telugu	594
+905	Amadeus	2005	English	595
+
+ 
+INSERT ING VALUES TO TABLE MOVIE _CAST
+
+INSERT INTO MOVIE_CASTVALUES(1, 901, ' anand');
+INSERT INTO MOVIE_CAST VALUES(2, 902, 'santosh');
+INSERT INTO MOVIE_CASTVALUES(3,903,'priya');
+INSERT INTO MOVIE_CASTVALUES(4, 904, ' vidya');
+INSERT INTO MOVIE_CASTVALUES(5, 905, ' veena');
+INSERT INTO MOVIE_CASTVALUES(5, 904, ' aarohi');
+SELECT * FROM MOVIE_CAST;
+act_id1	mov_id1	Role
+1	901	Anand
+2	902	santosh
+3	903	Priya
+4	904	Vidya
+5	905	Veena
+
+
+INSERT ING VALUES TO TABLE  RATING  
+INSERT INTO RATING VALUES(901, '8');
+INSERT INTO RATING VALUES(902, '7');
+INSERT INTO RATING VALUES(903, '1');
+INSERT INTO RATING VALUES(904, '5');
+INSERTINTO RATING VALUES(905, '4');
+SELECT * FROM RATING;
+
+
+
+Mov_id11	Rev_stars
+901	8
+902	7
+903	1
+904	5
+905	4
+
+Write the SQL queries to
+
+1.	List the title so fall movies directed by ‘Hitchcock’.
+SELECT mov_title
+FROM Moviem, directord
+WHERE d.dir_id = m.dir_id and d.dir_name='Hitchcock’;
+
+mov_title
+mann
+
+
+2.	Find the movie names where one or more actors acted in two or more movies SELECT mov_title,act_name,role
+FROM movie    JOIN movie_cast
+
+ORDERBY mov_title;
+
+mov_title	MAX(rev_stars)
+Amadeus	4
+deewana	7
+mann	8
+nuvve	1
+santosham	5
+
+3	Updateratingofallmoviesdirectedby‘StevenSpielberg’ to5.
+UPDATE rating SET rev_stars=5
+WHERE mov_ID in ( SELECT m.mov_ID
+FROM Moviem,ratingr
+WHERE M.mov_ID=r.mov_ID and m.dir_id in(SELECT dir_id FROM director
+WHERE dir_name='david'));
+
+
+
+
+
+
+
+mov_id11	rev_stars
+901	8
+902	7
+903	1
+904	5
+905	4

@@ -1,0 +1,153 @@
+Salesman database.
+
+TableCreation
+CREATETABLE salesman
+(salesman_id	NUMBER(10) PRIMARY KEY, salesman_name	VARCHAR(200),
+city	VARCHAR(200),
+commission	NUMBER(10));
+
+
+CREATETABLE customer
+(customer_id	NUMBER(10) PRIMARY KEY,customer_name	VARCHAR(200),
+city	VARCHAR(200)
+grade	NUMBER(10),
+salesman_id	NUMBER(10),
+FOREIGN KEY (salesman_id) REFERENCES salesman(salesman_id) ONDELETECASCADE);
+ 
+CREATETABLEorder1
+(order_num	NUMBER(10)PRIMARYKEY,
+purchase_amount	FLOAT,order_date	DATE,
+customer_id		NUMBER(10),salesman_id	NUMBER(10),
+FOREIGN KEY (salesman_id) REFERENCES salesman(salesman_id) ONDELETECASCADE,
+FOREIGNKEY(customer_id)REFERENCES customer(customer_id));
+
+INSERT ING VALUES TO  TABLE  SALESMAN  
+
+INSERT INTO salesman VALUES (5001, 'Priya',' Bangalore', 15);
+INSERT INTO salesman VALUES (5002, 'Preethi',' Mysore', 13);
+INSERT INTO salesman VALUES (5003, 'Poonam',' Mangalore', 11); INSERT INTO salesman VALUES(5004,'Payal','Delhi',12);
+INSERT INTO salesman VALUES (5005,'Prerana','Bombay',19);
+
+        SELECT * FROM SALESMAN;
+
+
+salesman_id	salesman_name	city	commission
+5001	Priya	Bangalore	15
+5002	Preethi	Mysore	13
+5003	Poonam	Mangalore	11
+5004	Payal	Delhi	12
+5005	Prerana	Bombay	19
+INSERT ING VALUES TO TABLE  CUSTOMER
+
+INSERT INTO customer VALUES(4001,'Dimple','Bombay',500,5001);
+INSERT INTO customer VALUES (4002, 'Deepak',' Mangalore', 200,5002);
+INSERT INTO customer VALUES (4003, 'Dhanush',' Mysore', 300,5003);
+INSERT INTO customer VALUES (4004,'Dhyan','Bangalore',400,5005); 
+INSERTINTO customer VALUES (4005,'Dhanya','Mandya',100,5001);
+
+
+SELECT * FROM customer;
+
+customer_id	customer_name	city	grade	salesman_id
+4001	Dimple	Bombay	100	5001
+4002	Deepak	Mangalore	200	5002
+4003	Dhanush	Mysore	300	5003
+4004	Dhyan	Bangalore	400	5005
+4005	Dhanya	Mandya	100	5001
+4008	Medha	bangalore	800	5005
+4009	Navya	delhi	900	5001
+INSERT ING VALUES TO TABLE  ORDER1 
+
+INSERTINTO order1VALUES (90001,'150.5','2009-5-1',4001,5001);
+INSERTINTO order1VALUES (90002,'111.9','2010-11-9',4004,5002);
+INSERTINTO order1VALUES (90003,'1501.4','2005-9-21',4003,5005);
+INSERTINTO order1VALUES (90004,'150.15','2013-12-10',4002,5003);
+INSERTINTO order1VALUES (90005,'199.19','2015-1-11',4005,5004);
+
+
+SELECT* FROMorder1;
+
+order_num	purchase_amount	order_date	customer_id	salesman_id
+90001	150.5	01.05.2009	4001	5001
+90002	111.9	09.11.2010	4004	5002
+90003	1501.4	21.09.2005	4003	5005
+90004	150.15	10.12.2013	4002	5003
+90005	199.19	11.01.2015	4005	5004
+ 
+1.	CountthecustomerswithgradesaboveBangalore’saverage.
+SELECT grade, COUNT(DISTINCTcustomer_id)
+FROM customer
+GROUP BY grade
+HAVING grade>(SELECT avg(grade)
+FROM customer
+WHERE city='bangalore');
+
+grade	COUNT(DISTINCTcustomer_id)
+800	1
+900	1
+
+2.	Findthenameandnumbersofallsalesmanwhohadmorethanonecustomer.
+SELECT salesman_id, salesman_name
+FROM salesman a WHERE 1< (SELECT COUNT(*)
+FROM customer
+WHERE salesman_id = a.salesman_id);
+
+salesman_id	salesman_name
+5001	Priya
+5005	Prerana
+
+3.	Listallthesalesmanandindicatethosewhohaveanddon’thavecustomersintheircities(UseUNIONoperation.)
+SELECT salesman.salesman_id, salesman_name, customer_name, commission
+FROM salesman, customer
+WHERE salesman.city = customer.city
+UNION
+SELECT salesman_id, salesman_name, 'NOMATCH', commission
+ 
+FROM salesman
+WHERE NOT city = ANY
+(SELECT city
+FROM customer)
+ORDER BY 2 DESC;
+
+salesman_id	salesman_name	customer_name	commission
+5001	Priya	Dhyan	15
+5001	Priya	medha	15
+5005	Prerana	Dimple	19
+5002	Preethi	Dhanush	13
+5003	Poonam	Deepak	11
+5004	Payal	Navya	12
+
+
+4.	Createaviewthatfindsthesalesmanwhohasthecustomerwiththehighestorderofaday.
+
+
+CREATEVIEWsalesman11AS
+SELECT b.order_date, a.salesman_id, a.salesman_name
+FROM salesmana, order1b
+WHERE a.salesman_id = b.salesman_id
+AND b.purchase_amount=
+(SELECT MAX (purchase_amount) FROM order1c
+WHERE c.order_date = b.order_date);
+SELECT*FROMsalesman11;
+
+order_date	salesman_id	salesman_name
+11.01.2015	5004	Payal
+10.12.2013	5003	Poonam
+ 
+
+09.11.2010	5002	Preethi
+01.05.2009	5001	Priya
+21.09.2005	5005	Prerana
+
+
+
+5.	DemonstratetheDELETEoperationbyremovingsalesmanwithid1000.Allhisordersmustalsobedeleted.
+
+DELETE FROM salesman WHERE salesman_id=5001;
+SELECT * FROM salesman;
+
+salesman_id	salesman_name	City	commission
+5002	Preethi	Mysore	13
+5003	Poonam	Mangalore	11
+5004	Payal	Delhi	12
+5005	Prerana	Bombay	19
